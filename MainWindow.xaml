@@ -1,0 +1,225 @@
+﻿<!-- With inspiration from https://nf2p.com/how-to/a-basic-borderless-wpf-window-with-bad-drop-shadow /-->
+<Window x:Name="MainWindow1" x:Class="Fraamo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Fraamo"
+        mc:Ignorable="d"
+        Title="Fraamo" Height="450" Width="800" Left="0" Top="0"
+        WindowStartupLocation="Manual" Topmost="True" ResizeMode="CanResizeWithGrip"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" Opacity="100" 
+        SizeChanged="Window_SizeChanged" Closing="MainWindow1_Closing" Initialized="MainWindow1_Initialized"
+        >
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute_1" Executed="CommandBinding_Executed_1" />
+        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute_1" Executed="CommandBinding_Executed_2" />
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute_1" Executed="CommandBinding_Executed_3" />
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Setter Property="Margin" Value="0"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=MainWindow1, Path=WindowState}" Value="Maximized">
+                        <!-- Add margin to account for the extra space WPF is adding  -->
+                        <Setter Property="Margin" Value="6,6,4,4" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Border Margin="1">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" 
+                                  Direction="270" 
+                                  BlurRadius="5" 
+                                  ShadowDepth="2" />
+            </Border.Effect>
+            <Grid Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="1" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="1" />
+                </Grid.ColumnDefinitions>
+                <Rectangle  Grid.RowSpan="3" Grid.ColumnSpan="3" 
+                            Name="titleBar_Rectangle" 
+                            Height="10" Width="50" Margin="0,0,0,0" 
+                            VerticalAlignment="Top" HorizontalAlignment="Center" 
+                            Fill="WhiteSmoke" MouseEnter="titleBar_Rectangle_MouseEnter" />
+                <DockPanel Grid.RowSpan="3" Grid.ColumnSpan="3">
+                    <Grid Name="titleBar" 
+                            DockPanel.Dock="Top"
+                            Height="29" Width="370"
+                            Background="WhiteSmoke"
+                            VerticalAlignment="Center"
+                            MouseLeftButtonDown="titleBar_MouseLeftButtonDown" MouseEnter="titleBar_MouseEnter" MouseLeave="titleBar_MouseLeave" >
+                        <DockPanel HorizontalAlignment="Left">
+                            <TextBlock Padding="8" 
+                                       VerticalAlignment="Center"
+                                       Text="Fraamo"
+                                       Foreground="Black" 
+                                       FontSize="12" >
+                            </TextBlock>
+                            <TextBlock Padding="8" 
+                                   VerticalAlignment="Center" 
+                                   Text="Size:" 
+                                   Foreground="Black" 
+                                   FontSize="12" Margin="10,0,0,0"/>
+                            <ComboBox x:Name="comboBox"  Margin="0,0,0,0" Width="120" Height="20" 
+                                      IsEditable="True" IsTextSearchEnabled="False"
+                                      SelectionChanged="comboBox_SelectionChanged"  KeyDown="comboBox_KeyDown" DropDownClosed="comboBox_DropDownClosed">
+                                <ComboBoxItem Content="3000x1080" />
+                                <ComboBoxItem Content="1920x1080 - 16:9" />
+                                <ComboBoxItem Content="1366x768   - 16:9" />
+                                <ComboBoxItem Content="1280x720   - 16:9" />
+                                <ComboBoxItem Content="1024x768   - 4:3" />
+                            </ComboBox>
+                        </DockPanel>
+                        <DockPanel DockPanel.Dock="Top" >
+                            <Button Name="ButtonCloseApp" Command="{x:Static SystemCommands.CloseWindowCommand}"
+                                    Content="" Margin="0,0,0,0" Height="29" Width="45"
+                                    DockPanel.Dock="Right" HorizontalAlignment="Right"  >
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/Fraamo;component/Resources/Close.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border Background="{TemplateBinding Background}">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background">
+                                                    <Setter.Value>
+                                                        <ImageBrush ImageSource="/Fraamo;component/Resources/CloseHover.png" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Name="ButtonMaximizeApp" Command="{x:Static SystemCommands.MaximizeWindowCommand}" 
+                                    Content="" Margin="0,0,0,0" Height="29" Width="45"
+                                    DockPanel.Dock="Right" HorizontalAlignment="Right"  >
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/Fraamo;component/Resources/Maximize.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border Background="{TemplateBinding Background}">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                                    <Condition Binding="{Binding ElementName=MainWindow1, Path=WindowState}" Value="Normal"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <ImageBrush ImageSource="/Fraamo;component/Resources/MaximizeHover.png" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                                    <Condition Binding="{Binding ElementName=MainWindow1, Path=WindowState}" Value="Maximized"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <ImageBrush ImageSource="/Fraamo;component/Resources/RestoreHover.png" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger >
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False"/>
+                                                    <Condition Binding="{Binding ElementName=MainWindow1, Path=WindowState}" Value="Maximized"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <ImageBrush ImageSource="/Fraamo;component/Resources/Restore.png" />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button Name="ButtonMinimizeApp" Command="{x:Static SystemCommands.MinimizeWindowCommand}"
+                                    Content="" Margin="0,0,0,0" Height="29" Width="45"
+                                    DockPanel.Dock="Right" HorizontalAlignment="Right"  >
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/Fraamo;component/Resources/Minimize.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border Background="{TemplateBinding Background}">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background">
+                                                    <Setter.Value>
+                                                        <ImageBrush ImageSource="/Fraamo;component/Resources/MinimizeHover.png" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DockPanel>
+                    </Grid>
+                    <ContentControl Name="content" />
+                </DockPanel>
+                <Rectangle Name="topLeft" Fill="Black" />
+                <Rectangle Name="top" Fill="Black" Grid.Column="1" />
+                <Rectangle Name="topRight" Fill="Black" Grid.Column="2" />
+                <Rectangle Name="right" Fill="Black" Grid.Row="1" Grid.Column="2" />
+                <Rectangle Name="bottomRight" Fill="Black" Grid.Row="2" Grid.Column="2" />
+                <Rectangle Name="bottom" Fill="Black" Grid.Row="2" Grid.Column="1" />
+                <Rectangle Name="bottomLeft" Fill="Black" Grid.Row="2" />
+                <Rectangle Name="left" Fill="Black" Grid.Row="1" />
+            </Grid>
+        </Border>
+    </Grid>
+
+</Window>
