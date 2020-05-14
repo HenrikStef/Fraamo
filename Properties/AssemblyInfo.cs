@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Fraamo")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A simple desktop application to share part of the desktop for use with e.g. Skype’s program share functionality.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Henrik Steffensen")]
 [assembly: AssemblyProduct("Fraamo")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright © 2020 Henrik Steffensen")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
