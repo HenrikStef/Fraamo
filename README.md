@@ -12,3 +12,7 @@ However, when it comes to sharing your desktop with others (who do not have so m
 **Solution**
 
 To remedy this, I put together a small desktop application, Fraamo, which basically is a frame and a transparent canvas. You can then use Skype’s “share a program” functionality to share Fraamo and thereby a specific area of the desktop.
+
+*Known limitations:*
+* *Cannot show context menus and Aero effects (e.g. Alt+Tab application switch menu). Shows a black rectangle instead.*
+* *Cannot drag window out of maximized state*
